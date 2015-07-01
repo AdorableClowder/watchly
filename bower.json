@@ -1,8 +1,13 @@
 {
   "name": "Watchly",
   "version": "0.1.0",
-  "private": "true",
   "devDependencies": {},
+  "license": "MIT",
+   "ignore": [
+     "**/.*",
+     "node_modules",
+     "bower_components"
+   ],
   "dependencies": {
     "angular": "~1.4.1",
     "angular-animate": "~1.4.1",
@@ -10,7 +15,8 @@
     "angular-ui-router": "~0.2.15",
     "ionic": "driftyco/ionic-bower#v1.0.0",
     "ionicons": "~2.0.1",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "ngCordova": "~0.1.17-alpha"
   },
   "resolutions": {
     "angular": "1.4.1",

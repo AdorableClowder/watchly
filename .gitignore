@@ -23,17 +23,16 @@ build/
 dist/
 www/css/*.app.*
 
-# Dependency directorys
+# Dependency directories
 # Deployed apps should consider commenting these lines out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules/
 bower_components/
-www/lib/*
 platforms/
+plugins/
 
 
 # Private information
-knex-config.js
 public
 server/db/dev-support-assets
 versions

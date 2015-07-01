@@ -2,11 +2,17 @@
   "name": "watchly",
   "version": "0.1.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "bower install"
   },
   "description": "watchly: virtual townwatch",
+  "engines": {
+        "node": "~0.10.25",
+        "npm": "2.1.x"
+    },
   "dependencies": {
     "async": "^1.2.1",
+    "bower": "~1.4.1",
     "bcrypt-nodejs": "~0.0.3",
     "bluebird": "~2.9.30",
     "body-parser": "^1.13.1",
@@ -19,7 +25,6 @@
     "request": "^2.58.0"
   },
   "devDependencies": {
-    "bower": "~1.4.1",
     "gulp": "^3.9.0",
     "gulp-browserify": "~0.5.1",
     "gulp-clean": "~0.3.1",

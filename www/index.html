@@ -14,20 +14,36 @@
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic.bundle.min.js"></script>
+
+    <!-- A wildcard can be used to whitelist the entire network,
+     over HTTP and HTTPS.
+     *NOT RECOMMENDED* -->
+    <allow-navigation href="*" />
     <!-- google maps api -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
+
     <!-- jquery -->
+
+    <!-- cordova photo helper -->
+    <script src="lib/ng-Cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <!-- watchly js -->
     <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/services.js"></script>
+    <!-- Controllers -->
+    <script src="js/controllers/MapCtrl.js"></script>
+    <script src="js/controllers/ImageCtrl.js"></script>
+    <!-- Services -->
+    <script src="js/services/Auth.js"></script>
+    <script src="js/services/FileService.js"></script>
+    <script src="js/services/ImageService.js"></script>
+    <script src="js/services/Incidents.js"></script>
+    <script src="js/services/Messages.js"></script>
   </head>
 
   <body ng-app="watchly" ng-controller="MapCtrl">
-    
+
     <ion-header-bar class="bar-calm">
       <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
       <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>
@@ -39,7 +55,7 @@
       <div id="map"></div>
     </ion-content>
 
-    <div class="incidentReportForm" ng-hide="incidentReportForm.hidden">
+    <div class="incidentReportForm" ng-hide="incidentReportForm.hidden" ng-controller="ImageCtrl">
         <label class="incidentReportTitle">Report New Incident</label>
         <label class="incidentReportFormLabel item item-input item-select">
             <div class="input-label">Incident Type: </div>
@@ -57,6 +73,11 @@
         </label>
         <label class="item item-input">
             <input class="incidentDescription" type="text" ng-model="newIncident.description"placeholder="Incident Description" required>
+        </label>
+        <label class="item item-input">
+            <button class="button button-block button-calm" ng-click="addMedia()">
+                Add image
+            </button>
         </label>
         <button ng-click="submitIncident(newIncident)" class="button button-block button-calm">Submit Incident</button>
     </div>

@@ -15,24 +15,28 @@ var paths = {
 };
 
 var libFilesToMove = [
-        './bower_components/jquery/dist/jquery.min.js',
-        './bower_components/jquery/dist/jquery.min.map',
-        './bower_components/angular/angular.min.js',
-        './bower_components/angular/angular.min.js.map',
-        './bower_components/angular-ui-router/release/angular-ui-router.min.js',
-        './bower_components/angular-sanitize/angular-sanitize.min.js',
-        './bower_components/angular-sanitize/angular-sanitize.min.js.map',
-        './bower_components/angular-animate/angular-animate.min.js',
-        './bower_components/angular-animate/angular-animate.min.js.map',
-        './bower_components/ionic/css/ionic.min.css',
-        './bower_components/ionic/js/ionic-angular.min.js',
-        './bower_components/ionic/js/ionic.bundle.min.js',
-        './bower_components/ionicons/css/ionicons.min.css',
-        './manifest.json'
-    ];
+  './bower_components/jquery/dist/jquery.min.js',
+  './bower_components/jquery/dist/jquery.min.map',
+  './bower_components/angular/angular.min.js',
+  './bower_components/angular/angular.min.js.map',
+  './bower_components/angular-ui-router/release/angular-ui-router.min.js',
+  './bower_components/angular-sanitize/angular-sanitize.min.js',
+  './bower_components/angular-sanitize/angular-sanitize.min.js.map',
+  './bower_components/angular-animate/angular-animate.min.js',
+  './bower_components/angular-animate/angular-animate.min.js.map',
+  './bower_components/ionic/css/ionic.min.css',
+  './bower_components/ionic/js/ionic-angular.min.js',
+  './bower_components/ionic/js/ionic.bundle.min.js',
+  './bower_components/ionicons/css/ionicons.min.css',
+  './bower_components/ngCordova/dist/ng-Cordova.js',
+  './bower_components/ngCordova/dist/ng-Cordova.min.js',
+  './bower_components/ngCordova/dist/ng-Cordova-mocks.js',
+  './bower_components/ngCordova/dist/ng-Cordova-mocks.min.js',
+  './manifest.json'
+];
 
 
-gulp.task('sass', function(done) {
+gulp.task('sass', function (done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass({
       errLogToConsole: true
@@ -41,27 +45,33 @@ gulp.task('sass', function(done) {
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
+    .pipe(rename({
+      extname: '.min.css'
+    }))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
 });
 
-gulp.task('clean', function(){
-  return gulp.src(['./www/lib/*'], {read:false})
-  .pipe(clean());
+gulp.task('clean', function () {
+  return gulp.src(['./www/lib/*'], {
+      read: false
+    })
+    .pipe(clean());
 });
 
-gulp.task('cleanup', function(){
-  return gulp.src(['./www/lib/*','platforms','bower_components'], {read:false})
-  .pipe(clean());
+gulp.task('cleanup', function () {
+  return gulp.src(['./www/lib/*', 'platforms', 'bower_components'], {
+      read: false
+    })
+    .pipe(clean());
 });
 
-gulp.task('move_lib',['clean'], function(){
+gulp.task('move_lib', ['clean'], function () {
   gulp.src(libFilesToMove)
-  .pipe(gulp.dest('./www/lib/'));
+    .pipe(gulp.dest('./www/lib/'));
 });
 
-gulp.task('lint', function() {
+gulp.task('lint', function () {
   return gulp.src(['./www/js/*.js',
       '*.js',
       './server/*.js',
@@ -72,11 +82,11 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch(paths.sass, ['sass']);
 });
 
-gulp.task('git-check', function(done) {
+gulp.task('git-check', function (done) {
   if (!sh.which('git')) {
     console.log(
       '  ' + gutil.colors.red('Git is not installed.'),
@@ -89,9 +99,9 @@ gulp.task('git-check', function(done) {
   done();
 });
 
-gulp.task('install', ['git-check'], function() {
+gulp.task('install', ['git-check'], function () {
   return bower.commands.install()
-    .on('log', function(data) {
+    .on('log', function (data) {
       gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
@@ -101,29 +111,21 @@ gulp.task('default', ['lint', 'sass', 'move_lib']);
 // Generate Public Folder
 
 gulp.task('clean_public', function () {
-  return gulp.src(['./www/lib/*'], {read:false})
+  return gulp.src(['./www/lib/*'], {
+      read: false
+    })
     .pipe(clean());
 });
 
 
-gulp.task('move_to_public', ['clean_public'], function(){
+gulp.task('move_to_public', ['clean_public'], function () {
   gulp.src(['!./public', '!./versions', '!./server/config/knex-config.js', './**/*.*'])
     .pipe(gulp.dest('./public/'));
 });
 
-gulp.task('move_config_file', ['move_to_public'], function() {
+gulp.task('move_config_file', ['move_to_public'], function () {
   gulp.src(['./knex-config.js'])
     .pipe(gulp.dest('./public/server/config/'));
 });
 
 gulp.task('public', ['move_config_file']);
-
-
-
-
-
-
-
-
-
-
