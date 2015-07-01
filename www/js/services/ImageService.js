@@ -28,7 +28,10 @@ angular.module('watchly.ImageService', [])
       allowEdit: false,
       encodingType: Camera.EncodingType.JPEG,
       popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false
+      saveToPhotoAlbum: true,
+      quality: 50,
+      targetWidth: 100,
+      targetHeight: 100
     };
   }
 
