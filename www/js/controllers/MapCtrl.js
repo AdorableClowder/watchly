@@ -296,7 +296,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     var dbIncident = {};
     // $scope.removeIncident();
     dbIncident.description = incident.description;
-    dbIncident.incidentTypeId = $scope.incidentTypeNames[$scope.newIncidentType];
+    // Set incidentTypeId to bind icon for rendering
+    dbIncident.incidentTypeId = $scope.incidentTypeNames[incident.type];
 
     if (incident.curDate === "") {
       incident.curDate = new Date();

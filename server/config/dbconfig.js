@@ -3,7 +3,7 @@ var knex = require('./knex-config');
 var bookshelf = require('bookshelf')(knex);
 
 var initialize = function(err, results) {
-  if(err) console.log(err); 
+  if(err) console.log(err);
   require('./db-initialize');
 }
 
@@ -54,11 +54,14 @@ async.parallel([
           incident.integer('userId', 11).references('id').inTable('users').unsigned();
           incident.integer('incidentTypeId', 11).references('id').inTable('incidentTypes').unsigned();
           incident.string('description', 255);
+          incident.string('imageURL', 255);
+          incident.integer('popularity', 11);
+          incident.integer('votes', 11).unsigned();
           incident.float('latitude', 10, 6);
           incident.float('longitude', 10, 6);
           incident.string('address', 100);
           incident.string('fuzzyAddress', 100);
-          incident.dateTime('occurred_at'); 
+          incident.dateTime('occurred_at');
           incident.timestamps();
         }).then(function (table) {
           callback();

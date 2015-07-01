@@ -41,13 +41,21 @@ var types = [
   {
     'type': 'Other Danger',
     'iconFilename': 'other.png'
+  },
+  {
+    'type': 'Dog',
+    'iconFilename': 'dog.png'
+  },
+  {
+    'type': 'Cat',
+    'iconFilename': 'cat.png'
   }
 ];
 
 var createIncidentType = function (type, iconFilename) {
   new IncidentType({'type': type}).fetch().then(function(found) {
     if(!found) {
-      new IncidentType({ 
+      new IncidentType({
         'type': type,
         'iconFilename': iconFilename
       }).save().then(function (newIncidentType) {

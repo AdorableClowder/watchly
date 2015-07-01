@@ -2,7 +2,7 @@ var knex = require('../config/knex-config');
 var Incident = require('../db/models/incident');
 var Incidents = require('../db/collections/incidents');
 
-module.exports = {  
+module.exports = {
   findIncident: function (req, res) {
     var body = req.body;
 
@@ -16,7 +16,7 @@ module.exports = {
       .whereBetween('longitude', [yMin, yMax])
       .then(function (rows) {
         res.send(rows);
-      });  
+      });
   },
 
   allIncidents: function (req, res, next) {
