@@ -19,6 +19,15 @@ module.exports = {
       });
   },
 
+  // TODO: upPopularity and downPopularity knex db query functions to
+  upPopularity: function (req, res) {
+
+  },
+
+  downPopularity: function (req, res) {
+
+  },
+
   allIncidents: function (req, res, next) {
     console.log('all incidents controller helper fired');
     var query = 'select users.username, incidents.*, incidentTypes.type, incidentTypes.iconFilename from incidents, users,incidentTypes where incidents.userid = users.id and incidents.incidentTypeId = incidentTypes.id';

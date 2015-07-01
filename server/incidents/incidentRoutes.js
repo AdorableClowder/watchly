@@ -5,7 +5,9 @@ module.exports = function (app) {
   console.log('incident routes module run')
   app.route('/')
     .get(incidentController.allIncidents)
-    .post(incidentController.newIncident);
+    .post(incidentController.newIncident)
+    .put(incidentController.upPopularity)
+    .put(incidentController.downPopularity);
 
   app.route('/nearby')
     .post(incidentController.findIncident);

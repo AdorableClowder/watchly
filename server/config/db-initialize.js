@@ -2,46 +2,46 @@ var IncidentType = require('../db/models/incidentType');
 var IncidentTypes = require('../db/collections/incidentTypes');
 
 var types = [
-  {
-    'type': 'Vandalism',
-    'iconFilename': 'vandalism.png'
-  },
-  {
-    'type': 'Theft',
-    'iconFilename': 'theft.png'
-  },
-  {
-    'type': 'Fight',
-    'iconFilename': 'fight.png'
-  },
-  {
-    'type': 'Drug use',
-    'iconFilename': 'drug_use.png'
-  },
-  {
-    'type': 'Pedestrian Hazard',
-    'iconFilename': 'ped_hazard.png'
-  },
-  {
-    'type': 'Break In',
-    'iconFilename': 'break_in.png'
-  },
-  {
-    'type': 'Aggressive Person',
-    'iconFilename': 'aggro_per.png'
-  },
-  {
-    'type': 'Mugging',
-    'iconFilename': 'mugging.png'
-  },
-  {
-    'type': 'Gun Use',
-    'iconFilename': 'gunshot.png'
-  },
-  {
-    'type': 'Other Danger',
-    'iconFilename': 'other.png'
-  },
+  // {
+  //   'type': 'Vandalism',
+  //   'iconFilename': 'vandalism.png'
+  // },
+  // {
+  //   'type': 'Theft',
+  //   'iconFilename': 'theft.png'
+  // },
+  // {
+  //   'type': 'Fight',
+  //   'iconFilename': 'fight.png'
+  // },
+  // {
+  //   'type': 'Drug use',
+  //   'iconFilename': 'drug_use.png'
+  // },
+  // {
+  //   'type': 'Pedestrian Hazard',
+  //   'iconFilename': 'ped_hazard.png'
+  // },
+  // {
+  //   'type': 'Break In',
+  //   'iconFilename': 'break_in.png'
+  // },
+  // {
+  //   'type': 'Aggressive Person',
+  //   'iconFilename': 'aggro_per.png'
+  // },
+  // {
+  //   'type': 'Mugging',
+  //   'iconFilename': 'mugging.png'
+  // },
+  // {
+  //   'type': 'Gun Use',
+  //   'iconFilename': 'gunshot.png'
+  // },
+  // {
+  //   'type': 'Other Danger',
+  //   'iconFilename': 'other.png'
+  // },
   {
     'type': 'Dog',
     'iconFilename': 'dog.png'
@@ -60,7 +60,7 @@ var createIncidentType = function (type, iconFilename) {
         'iconFilename': iconFilename
       }).save().then(function (newIncidentType) {
         IncidentTypes.add(newIncidentType);
-        console.log('added new incidentType');
+        console.log('added incidentType: ' + type);
       });
     }
   });

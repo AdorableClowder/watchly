@@ -14,6 +14,32 @@ angular.module('watchly.Incidents', [])
       });
   };
 
+  // send PUT request to upPopularity by 1 and up Votes by 1
+  var upPopularityById = function (incidentId) {
+    return $http({
+      method: 'PUT',
+      url: '/api/incidents/' + incidentId,
+    })
+    .then(function (res) {
+      if (res.status === 200) {} else {
+        console.log(res.data.error);
+      }
+    });
+  }
+
+  // send PUT request to downPopularity by 1 and  up Votes by 1
+  var downPopularityById = function (incidentId) {
+    return $http({
+      method: 'PUT',
+      url: '/api/incidents/' + incidentId,
+    })
+    .then(function (res) {
+      if (res.status === 200) {} else {
+        console.log(res.data.error);
+      }
+    });
+  }
+
   var getIncidentsByLocation = function (location) {
     return $http({
         method: 'GET',
@@ -70,6 +96,8 @@ angular.module('watchly.Incidents', [])
 
   return {
     getIncidentById: getIncidentById,
+    upPopularityById: upPopularityById,
+    downPopularityById: downPopularityById,
     getIncidentsByLocation: getIncidentsByLocation,
     getAllIncidents: getAllIncidents,
     getIncidentTypes: getIncidentTypes,

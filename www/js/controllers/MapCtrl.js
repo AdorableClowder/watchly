@@ -163,8 +163,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     });
 
     var incidentInfoWindowContent = '<div class="incidentInfoTitle"> <strong>' + incidentObj.type + '</strong> on ' + incidentObj.fuzzyAddress + ' </div>' +
-      '<div class="incidentInfoDescription"> ' + 'User Description: <strong>' + incidentObj.description + '</strong> </div>' +
-      '<div class="incidnetInfoUsername"> ' + 'Reported by <strong>' + incidentObj.username + '</strong> to have occured on <strong>' + incidentObj.occurred_at.slice(0, 10) + "</strong> at " + incidentObj.occurred_at.slice(11, 19) + '</div>';
+      '<div class="incidentInfoDescription"> '  + '</strong> </div>' +
+      '<div class="incidnetInfoUsername"> <strong>' + incidentObj.username + ': </strong> ' + incidentObj.description + " at " + incidentObj.occurred_at.slice(0, 10) + '  -  ' + incidentObj.occurred_at.slice(11, 19) + '</div>';
 
     var incidentInfoWindow;
 
@@ -290,7 +290,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
   $scope.submitIncident = function (incident) {
     $scope.loading = $ionicLoading.show({
-      content: 'Submitting New Incident...',
+      content: 'Uploading a new adorable pet ...',
       showBackdrop: false
     });
     var dbIncident = {};
@@ -298,6 +298,11 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     dbIncident.description = incident.description;
     // Set incidentTypeId to bind icon for rendering
     dbIncident.incidentTypeId = $scope.incidentTypeNames[incident.type];
+    // Set the imageURL to the input imageURL;
+    dbIncident.imageURL = incident.imageURL;
+    // Set initial popularity and votes to 0
+    dbIncident.popularity = 0;
+    dbIncident.votes = 0;
 
     if (incident.curDate === "") {
       incident.curDate = new Date();
