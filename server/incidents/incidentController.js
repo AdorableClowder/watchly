@@ -20,12 +20,13 @@ module.exports = {
   },
 
   // TODO: upPopularity and downPopularity knex db query functions to
-  upPopularity: function (req, res) {
-
-  },
-
-  downPopularity: function (req, res) {
-
+  updatePopularity: function (req, res, next) {
+    var query = 'update incidents set popularity = ' + req.body.popularity + ', votes = ' + req.body.votes + ' where id = ' + req.body.id;
+    console.log(query);
+    knex.raw(query)
+      .then(function (rows) {
+        res.send(rows);
+      });
   },
 
   allIncidents: function (req, res, next) {

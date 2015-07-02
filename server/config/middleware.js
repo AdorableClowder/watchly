@@ -19,6 +19,7 @@ module.exports = function (app, express) {
   var userRouter = express.Router();
   var incidentRouter = express.Router();
   var messageRouter = express.Router();
+  var photoRouter = express.Router();
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
@@ -28,6 +29,7 @@ module.exports = function (app, express) {
   app.use('/api/users', userRouter); // use user router for all user request
   app.use('/api/incidents', incidentRouter); // user link router for link request
   app.use('/api/messages', messageRouter);
+  app.use('/api/photos', photoRouter);
 
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);
@@ -40,4 +42,5 @@ module.exports = function (app, express) {
   require('../users/userRoutes.js')(userRouter);
   require('../incidents/incidentRoutes.js')(incidentRouter);
   require('../messages/messageRoutes.js')(messageRouter);
+  require('../photo/photoRoutes.js')(photoRouter);
 };

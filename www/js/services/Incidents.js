@@ -15,10 +15,11 @@ angular.module('watchly.Incidents', [])
   };
 
   // send PUT request to with updated popularity + number of votes
-  var updatePopularity = function (incidentId) {
+  var updatePopularity = function (petObj) {
     return $http({
       method: 'PUT',
-      url: '/api/incidents/' + incidentId,
+      url: '/api/incidents/update',
+      data: petObj
     })
     .then(function (res) {
       if (res.status === 200) {} else {
