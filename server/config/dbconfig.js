@@ -2,14 +2,15 @@ var async = require('async');
 var knex = require('./knex-config');
 var bookshelf = require('bookshelf')(knex);
 
-var initialize = function(err, results) {
-  if(err) console.log(err);
+var initialize = function (err, results) {
+  if (err) console.log(err);
   require('./db-initialize');
 }
 
 async.parallel([
+
   function (callback) {
-    bookshelf.knex.schema.hasTable('users').then(function(exists) {
+    bookshelf.knex.schema.hasTable('users').then(function (exists) {
       if (!exists) {
         bookshelf.knex.schema.createTable('users', function (user) {
           user.increments('id').primary().unsigned();
@@ -28,10 +29,9 @@ async.parallel([
         callback();
       }
     });
-  }
-  ,
-  function(callback) {
-    bookshelf.knex.schema.hasTable('incidentTypes').then(function(exists) {
+  },
+  function (callback) {
+    bookshelf.knex.schema.hasTable('incidentTypes').then(function (exists) {
       if (!exists) {
         bookshelf.knex.schema.createTable('incidentTypes', function (incidentType) {
           incidentType.increments('id').primary().unsigned();
@@ -44,10 +44,9 @@ async.parallel([
         callback();
       }
     });
-  }
-  ,
-  function(callback) {
-    bookshelf.knex.schema.hasTable('incidents').then(function(exists) {
+  },
+  function (callback) {
+    bookshelf.knex.schema.hasTable('incidents').then(function (exists) {
       if (!exists) {
         bookshelf.knex.schema.createTable('incidents', function (incident) {
           incident.increments('id').primary().unsigned();
@@ -70,10 +69,9 @@ async.parallel([
         callback();
       }
     });
-  }
-  ,
-  function(callback) {
-    bookshelf.knex.schema.hasTable('messages').then(function(exists) {
+  },
+  function (callback) {
+    bookshelf.knex.schema.hasTable('messages').then(function (exists) {
       if (!exists) {
         bookshelf.knex.schema.createTable('messages', function (message) {
           message.increments('id').primary().unsigned();

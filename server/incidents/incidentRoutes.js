@@ -15,5 +15,5 @@ module.exports = function (app) {
 
   app.route('/incidentType')
     .get(incidentController.getIncidentTypes);
-
+    
 };

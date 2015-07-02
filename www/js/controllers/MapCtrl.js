@@ -153,10 +153,11 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     }
   };
 
-  // template for the info window content
+  // template for the info window content.split(",")[0]
   $scope.infoHtml = 
       ' <div class="info-popup"> \
-        <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><% fuzzyAddress.split(",")[0] %></strong></span> \
+        <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><%= shortAddress %></strong></span> \
+        <p><strong id="percentage"><%= percentageOfUpvotes %></strong>% of voters think this pet is cute. What do you think?</p> \
         <div> \
           <img class="pet" src="<%= imageURL %>"/> \
           <div class="sidebar"> \
@@ -181,9 +182,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.template = _.template($scope.infoHtml);
-
   $scope.infoWindows = [];
-  // what does this incidentObj look like?
+  $scope.cache = {};
+
   $scope.renderIncident = function (incidentObj) {
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -192,13 +193,15 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       map: $scope.map,
       icon: incidentIcon
     });
+    incidentObj.shortAddress = incidentObj.fuzzyAddress.split(",")[0];
+    incidentObj.percentageOfUpvotes = parseInt(((incidentObj.votes + incidentObj.popularity) / (2 * incidentObj.votes)) * 100);
     // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' + 
     // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] + 
     // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
     var incidentInfoWindow;
-    // update this to the incidentObj parameter to use incidents from DB
     var incidentInfoWindowContent = $scope.template(incidentObj);
+    var hasVoted = false;
 
     google.maps.event.addListener(incident, 'click', function () {
       $scope.infoWindows.forEach(function (window) {
@@ -207,25 +210,36 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
-      google.maps.event.addListener(incidentInfoWindow, 'domready', function(){
+      google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
         var pop = document.getElementById('popularity');
         var numVotes = document.getElementById('votes');
-        google.maps.event.addDomListener(document.getElementById('up-arrow'), 'click', function () {
-          $scope.upvote(incidentObj, pop, numVotes);
-        });
-        google.maps.event.addDomListener(document.getElementById('down-arrow'), 'click', function () {
-          $scope.downvote(incidentObj, pop, numVotes);
-        });
+        // if there's something in the cache, a vote has already happened
+        // TODO: set proper % from cache
+        if ($scope.cache[incidentObj.id]) {
+          hasVoted = true;
+          cachedPop = $scope.cache[incidentObj.id].popularity;
+          cachedVotes = $scope.cache[incidentObj.id].votes;
+          cachedArrow = $scope.cache[incidentObj.id].hiddenArrow;
 
+          document.getElementById(cachedArrow).style.visibility = 'hidden';
+          pop.innerHTML = cachedPop;
+          document.getElementById('percentage').innerHTML = parseInt(((cachedVotes + cachedPop) / (2 * cachedVotes)) * 100);
+        }
+
+        if (!hasVoted) {
+          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
+            $scope.upvote(incidentObj, pop, numVotes);
+          });
+          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'click', function () {
+            $scope.downvote(incidentObj, pop, numVotes);
+          });
+        } 
       });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
-
     });
   };
-  
 
-  
   $scope.upvote = function (petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
     petObj.popularity++;
@@ -233,7 +247,15 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     Incidents.updatePopularity(petObj);
     // render new pop immediately on the screen
     pop.innerHTML++;
-    // TODO: DISABLE VOTING
+    // hide downvote arrow
+    document.getElementById('down-arrow').style.visibility = 'hidden';
+    // cache the updated values
+    $scope.cache[petObj.id] = {
+      popularity: petObj.popularity,
+      votes: petObj.votes,
+      hiddenArrow: 'down-arrow'
+    }
+
   }
   $scope.downvote = function(petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
@@ -242,7 +264,14 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     Incidents.updatePopularity(petObj);
     // render new pop immediately on the screen
     pop.innerHTML--;
-    // TODO: DISABLE VOTING
+    // hide upvote arrow
+    document.getElementById('up-arrow').style.visibility = 'hidden';
+    // cache the updated values
+    $scope.cache[petObj.id] = {
+      popularity: petObj.popularity,
+      votes: petObj.votes,
+      hiddenArrow: 'up-arrow'
+    }
   }
 
 

@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
-
+    <link href="lib/ionic.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="lib/ionic.min.css" rel="stylesheet">
     <link href="css/ionic.app.min.css" rel="stylesheet">
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
-
     <!-- ionic/angularjs js -->
     <script src="lib/ionic.bundle.min.js"></script>
-
     <!-- A wildcard can be used to whitelist the entire network,
      over HTTP and HTTPS.
      *NOT RECOMMENDED* -->
     <allow-navigation href="*" />
     <!-- google maps api -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
-
     <!-- underscore -->
     <script src="lib/underscore-min.js"></script>
     <!-- jquery -->
-
     <!-- cordova photo helper -->
     <script src="lib/ng-Cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
-
     <!-- watchly js -->
     <script src="js/app.js"></script>
     <!-- Controllers -->
     <script src="js/controllers/MapCtrl.js"></script>
     <script src="js/controllers/ImageCtrl.js"></script>
+    <script src="js/controllers/MyCtrl.js"></script>
     <!-- Services -->
     <script src="js/services/Auth.js"></script>
-    <script src="js/services/FileService.js"></script>
-    <script src="js/services/ImageService.js"></script>
     <script src="js/services/Incidents.js"></script>
     <script src="js/services/Messages.js"></script>
-  </head>
+    <!-- directives -->
+    <!-- photo helper -->
+    <!-- shim is needed to support non-HTML5 FormData browsers (IE8-9)-->
+    <script src="lib/ng-file-upload-shim.min.js"></script>
+    <script src="lib/ng-file-upload.min.js"></script>
+</head>
 
-  <body ng-app="watchly" ng-controller="MapCtrl">
-
+<body ng-app="watchly" ng-controller="MapCtrl">
     <ion-header-bar class="bar-calm">
-      <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
-      <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>
-      <!-- <a ng-click="testAlertForum()" class="button button-icon icon ion-navicon-round"></a> -->
-      <a ng-click="profileActivate()" class="button button-icon icon ion-ios-contact-outline"></a>
+        <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
+        <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>
+        <!-- <a ng-click="testAlertForum()" class="button button-icon icon ion-navicon-round"></a> -->
+        <a ng-click="profileActivate()" class="button button-icon icon ion-ios-contact-outline"></a>
     </ion-header-bar>
-
     <ion-content scroll="false">
-      <div id="map"></div>
+        <div id="map"></div>
     </ion-content>
-
-    <div class="incidentReportForm" ng-hide="incidentReportForm.hidden" ng-controller="ImageCtrl">
+    <div class="incidentReportForm" ng-hide="incidentReportForm.hidden" ng-controller="MyCtrl">
         <label class="incidentReportTitle">Report New Incident</label>
         <label class="incidentReportFormLabel item item-input item-select">
             <div class="input-label">Incident Type: </div>
@@ -74,20 +71,34 @@
             <input class="incidentTime" type="time" ng-model="newIncident.curTime">
         </label>
         <label class="item item-input">
-            <input class="incidentDescription" type="text" ng-model="newIncident.description"placeholder="Incident Description" required>
+            <input class="incidentDescription" type="text" ng-model="newIncident.description" placeholder="Incident Description" required>
         </label>
         <label class="item item-input">
-            <button class="button button-block button-calm" ng-click="addMedia()">
-                Add image
-            </button>
-        </label>
-        <button ng-click="submitIncident(newIncident)" class="button button-block button-calm">Submit Incident</button>
-    </div>
+            <!-- <input type="file" accept="image/*;capture=camera"> -->
+            <!-- <input type="file" name="file" onchange="console.log('angular.element(this.files): ', angular.element(this.files)); angular.element(this).scope().uploadFile(angular.element(this.files));" required/> -->
+            <!-- <div ng-controller="myCtrl">
+                <input type="file" file-model="myFile" />
+                <button ng-click="uploadFile()">upload!</button>
+            </div> -->
+            <div>
+                <button class="button button-block button-calm" ngf-select ngf-keep="false" ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
+                    Upload an Image!
+                </button>
+                <img class="upload-preview" ngf-src="files[0]" ngf-accept="'image/*'">
+            </div>
 
+        </label>
+        <button ng-click="upload(files); submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
+    </div>
     <ion-footer-bar class="bar-stable">
-    <h4 class="title">Watchly: Virtual Town Watch</h4>
-      <button ng-click="confirmIncidentCreate()" class="createIncident button button-calm" ng-hide="createIncidentButton.hidden"><a class="icon ion-edit"></a></button>
-      <button ng-click="removeIncident()" class="cancelIncident button button-assertive" ng-hide="cancelIncidentButton.hidden"><a class="icon ion-close"></a></button>
+        <h4 class="title">Petly: Where the Cute Pets At?</h4>
+        <button ng-click="confirmIncidentCreate()" class="createIncident button button-calm" ng-hide="createIncidentButton.hidden">
+            <a class="icon ion-edit"></a>
+        </button>
+        <button ng-click="removeIncident()" class="cancelIncident button button-assertive" ng-hide="cancelIncidentButton.hidden">
+            <a class="icon ion-close"></a>
+        </button>
     </ion-footer-bar>
-  </body>
+</body>
+
 </html>

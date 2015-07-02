@@ -53,9 +53,9 @@
 }
 
 .mainLogo {
-  height:auto; 
-  width:auto; 
-  max-width:300px; 
+  height:auto;
+  width:auto;
+  max-width:300px;
   max-height:45px;
 }
 
@@ -77,6 +77,11 @@
 .profileWindow {
   height: 425px;
   max-width: 320px;
+}
+
+.upload-preview {
+  max-width: 80%;
+  max-height: 50%;
 }
 
 

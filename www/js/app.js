@@ -1,9 +1,6 @@
 angular.module('watchly', [
-  'ionic',
-  'watchly.MapCtrl', 'watchly.ImageCtrl',
-  'watchly.Auth', 'watchly.FileService', 'watchly.ImageService',
-  'watchly.Incidents', 'watchly.Messages',
-  'ngCordova'
+  'ionic', 'watchly.MapCtrl', 'watchly.ImageCtrl', 'watchly.Auth',
+  'watchly.Incidents', 'watchly.Messages', 'ngCordova', 'fileUpload', 'ngFileUpload'
 ])
 
 .run(function ($ionicPlatform) {
