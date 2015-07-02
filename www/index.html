@@ -37,6 +37,7 @@
     <script src="js/services/Auth.js"></script>
     <script src="js/services/Incidents.js"></script>
     <script src="js/services/Messages.js"></script>
+    <script src="js/services/imageUpload.js"></script>
     <!-- directives -->
     <!-- photo helper -->
     <!-- shim is needed to support non-HTML5 FormData browsers (IE8-9)-->
@@ -74,21 +75,15 @@
             <input class="incidentDescription" type="text" ng-model="newIncident.description" placeholder="Incident Description" required>
         </label>
         <label class="item item-input">
-            <!-- <input type="file" accept="image/*;capture=camera"> -->
-            <!-- <input type="file" name="file" onchange="console.log('angular.element(this.files): ', angular.element(this.files)); angular.element(this).scope().uploadFile(angular.element(this.files));" required/> -->
-            <!-- <div ng-controller="myCtrl">
-                <input type="file" file-model="myFile" />
-                <button ng-click="uploadFile()">upload!</button>
-            </div> -->
             <div>
-                <button class="button button-block button-calm" ngf-select ngf-keep="false" ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
-                    Upload an Image!
+                <button class="button button-block button-calm" ngf-select ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
+                    Upload an Image
                 </button>
                 <img class="upload-preview" ngf-src="files[0]" ngf-accept="'image/*'">
             </div>
 
         </label>
-        <button ng-click="upload(files); submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
+        <button ng-click="submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
     </div>
     <ion-footer-bar class="bar-stable">
         <h4 class="title">Petly: Where the Cute Pets At?</h4>

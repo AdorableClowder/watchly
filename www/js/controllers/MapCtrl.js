@@ -1,6 +1,6 @@
 angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly.Messages'])
 
-.controller('MapCtrl', function ($scope, $http, $ionicModal, $ionicLoading, $ionicSideMenuDelegate, $compile, $filter, Auth, Incidents, Messages) {
+.controller('MapCtrl', function ($scope, $rootScope, $http, $ionicModal, $ionicLoading, $ionicSideMenuDelegate, $compile, $filter, Auth, Incidents, Messages) {
 
   function initialize() {
     $scope.geoCoder = new google.maps.Geocoder();
@@ -133,7 +133,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.getIncidents = function () {
-    
+
     Incidents.getAllIncidents().then(function (result) {
       result[0].forEach(function (incident) {
         $scope.incidents[incident.id] = incident;
@@ -154,8 +154,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   // template for the info window content.split(",")[0]
-  $scope.infoHtml = 
-      ' <div class="info-popup"> \
+  $scope.infoHtml =
+    ' <div class="info-popup"> \
         <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><%= shortAddress %></strong></span> \
         <p><strong id="percentage"><%= percentageOfUpvotes %></strong>% of voters think this pet is cute. What do you think?</p> \
         <div> \
@@ -195,8 +195,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     });
     incidentObj.shortAddress = incidentObj.fuzzyAddress.split(",")[0];
     incidentObj.percentageOfUpvotes = parseInt(((incidentObj.votes + incidentObj.popularity) / (2 * incidentObj.votes)) * 100);
-    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' + 
-    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] + 
+    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' +
+    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] +
     // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
     var incidentInfoWindow;
@@ -233,7 +233,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
           google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'click', function () {
             $scope.downvote(incidentObj, pop, numVotes);
           });
-        } 
+        }
       });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
@@ -257,7 +257,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     }
 
   }
-  $scope.downvote = function(petObj, pop, numVotes) {
+  $scope.downvote = function (petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
     petObj.popularity--;
     petObj.votes++;
@@ -397,7 +397,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // Set incidentTypeId to bind icon for rendering
     dbIncident.incidentTypeId = $scope.incidentTypeNames[incident.type];
     // Set the imageURL to the input imageURL;
-    dbIncident.imageURL = incident.imageURL;
+    console.log('imageURL: ', $rootScope.imageUrl);
+    dbIncident.imageURL = $rootScope.imageUrl;
     // Set initial popularity and votes to 0
     dbIncident.popularity = 0;
     dbIncident.votes = 0;
