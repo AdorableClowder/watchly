@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "devDependencies": {},
   "license": "MIT",
-   "ignore": [
-     "**/.*",
-     "node_modules",
-     "bower_components"
-   ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
   "dependencies": {
     "angular": "~1.4.1",
     "angular-animate": "~1.4.1",
@@ -16,7 +16,8 @@
     "ionic": "driftyco/ionic-bower#v1.0.0",
     "ionicons": "~2.0.1",
     "jquery": "~2.1.4",
-    "ngCordova": "~0.1.17-alpha"
+    "ngCordova": "~0.1.17-alpha",
+    "underscore": "~1.8.3"
   },
   "resolutions": {
     "angular": "1.4.1",

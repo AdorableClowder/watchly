@@ -1,5 +1,36 @@
 /* Empty. Add your own CSS if you like */
 
+.info-popup img.pet {
+    /* float: right; */
+    height: 200px;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.info-popup img.arrow {
+    width: 100%;
+}
+
+.info-popup .vote-and-pet {
+    max-width: auto;
+    width: 500px;
+}
+
+.info-popup .sidebar {
+    max-width: auto;
+    width: 65px;
+    float: left;
+    padding: 9px;
+}
+
+.info-popup center.popularity {
+  font-size: 25px;
+}
+
+.info-popup .description p {
+    float: right;
+}
+
 #map {
   display: block;
   width: 100%;
@@ -47,3 +78,5 @@
   height: 425px;
   max-width: 320px;
 }
+
+

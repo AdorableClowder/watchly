@@ -14,21 +14,8 @@ angular.module('watchly.Incidents', [])
       });
   };
 
-  // send PUT request to upPopularity by 1 and up Votes by 1
-  var upPopularityById = function (incidentId) {
-    return $http({
-      method: 'PUT',
-      url: '/api/incidents/' + incidentId,
-    })
-    .then(function (res) {
-      if (res.status === 200) {} else {
-        console.log(res.data.error);
-      }
-    });
-  }
-
-  // send PUT request to downPopularity by 1 and  up Votes by 1
-  var downPopularityById = function (incidentId) {
+  // send PUT request to with updated popularity + number of votes
+  var updatePopularity = function (incidentId) {
     return $http({
       method: 'PUT',
       url: '/api/incidents/' + incidentId,
@@ -53,7 +40,7 @@ angular.module('watchly.Incidents', [])
         return res.data;
       });
   };
-
+  // What is this object gonna look like?
   var getAllIncidents = function () {
     return $http({
         method: 'GET',
@@ -63,6 +50,7 @@ angular.module('watchly.Incidents', [])
         if (res.status === 200) {} else {
           console.log(res.data.error);
         }
+        console.log('data returned from getAllIncidents:', res.data);
         return res.data;
       });
   };
@@ -96,8 +84,7 @@ angular.module('watchly.Incidents', [])
 
   return {
     getIncidentById: getIncidentById,
-    upPopularityById: upPopularityById,
-    downPopularityById: downPopularityById,
+    updatePopularity: updatePopularity,
     getIncidentsByLocation: getIncidentsByLocation,
     getAllIncidents: getAllIncidents,
     getIncidentTypes: getIncidentTypes,

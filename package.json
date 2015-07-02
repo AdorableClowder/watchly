@@ -22,7 +22,8 @@
     "knex": "~0.8.6",
     "morgan": "^1.6.0",
     "mysql": "~2.7.0",
-    "request": "^2.58.0"
+    "request": "^2.58.0",
+    "aws-sdk": "*"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
