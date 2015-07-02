@@ -6,7 +6,7 @@ module.exports = {
     aws.config.update({accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY});
     var s3 = new aws.S3();
     var s3_params = {
-        Bucket: S3_BUCKET,
+        Bucket: process.env.S3_BUCKET,
         Key: req.query.file_name,
         Expires: 60,
         ContentType: req.query.file_type,
@@ -20,7 +20,7 @@ module.exports = {
             console.log('success');
             var return_data = {
                 signed_request: data,
-                url: 'https://'+S3_BUCKET+'.s3.amazonaws.com/'+req.query.file_name
+                url: 'https://'+process.env.S3_BUCKET+'.s3.amazonaws.com/'+req.query.file_name
             };
             res.write(JSON.stringify(return_data));
             res.end();
