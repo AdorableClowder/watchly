@@ -2,7 +2,8 @@ var aws = require('aws-sdk');
 
 module.exports = {
   uploadPhoto: function(req, res){
-    aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
+    console.log('uploadPhoto is being called');
+    aws.config.update({accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY});
     var s3 = new aws.S3();
     var s3_params = {
         Bucket: S3_BUCKET,
@@ -16,6 +17,7 @@ module.exports = {
             console.log(err);
         }
         else{
+            console.log('success');
             var return_data = {
                 signed_request: data,
                 url: 'https://'+S3_BUCKET+'.s3.amazonaws.com/'+req.query.file_name
