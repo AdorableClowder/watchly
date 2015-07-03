@@ -91,7 +91,7 @@ module.exports = {
 
   allIncidents: function (req, res, next) {
     console.log('all incidents controller helper fired');
-    var query = 'select users.username, incidents.*, incidentTypes.type, incidentTypes.iconFilename from incidents, users,incidentTypes where incidents.userid = users.id and incidents.incidentTypeId = incidentTypes.id';
+    var query = 'select users.username, incidents.*, incidentTypes.type, incidentTypes.pet, incidentTypes.iconFilename from incidents, users,incidentTypes where incidents.userid = users.id and incidents.incidentTypeId = incidentTypes.id';
     knex.raw(query)
     // knex.select('*').from('incidents')
       .then(function (rows) {

@@ -156,7 +156,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   // template for the info window content.split(",")[0]
   $scope.infoHtml =
     ' <div class="info-popup"> \
-        <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><%= shortAddress %></strong></span> \
+        <span><strong><%= username %></strong> has spotted a <strong><%= pet %></strong> at <strong><%= shortAddress %></strong></span> \
         <p><strong id="percentage"><%= percentageOfUpvotes %></strong>% of voters think this pet is cute. What do you think?</p> \
         <div> \
           <img class="pet" src="<%= imageURL %>"/> \
@@ -185,7 +185,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.infoWindows = [];
   $scope.cache = {};
 
-  // extend the object within renderIncident with 
+  // extend the object within renderIncident with
   $scope.extend = function (obj) {
     obj.shortAddress = obj.fuzzyAddress.split(",")[0];
     if (obj.votes === 0) {
@@ -216,7 +216,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     incidentObj = $scope.extend(incidentObj);
     // create html for info window by passing in incident obj
     var incidentInfoWindowContent = $scope.template(incidentObj);
-    
+
     google.maps.event.addListener(incident, 'mousedown', function () {
       $scope.infoWindows.forEach(function (window) {
         window.close();
@@ -449,6 +449,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         $scope.loading.hide();
       });
     });
+    console.log($rootScope);
   };
 
   $scope.reverseGeo = function (location, next) {

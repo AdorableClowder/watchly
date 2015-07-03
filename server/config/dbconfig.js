@@ -36,6 +36,7 @@ async.parallel([
         bookshelf.knex.schema.createTable('incidentTypes', function (incidentType) {
           incidentType.increments('id').primary().unsigned();
           incidentType.string('type', 20);
+          incidentType.string('pet', 20);
           incidentType.string('iconFilename', 50);
         }).then(function (table) {
           callback();
