@@ -25,7 +25,11 @@ angular.module('watchly.imageUpload', ['ngFileUpload'])
         url: signed_request,
         data: file,
         headers: {
-                    'x-amz-acl': 'public-read'
+                    'x-amz-acl': 'public-read',
+                    'Content-Type': file.type,
+                    'Expires': 360000,
+                    'Key': file.name,
+                    'Bucket': 'petly2015'
                   }
       })
       .then(function (resp) {
