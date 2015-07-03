@@ -3,7 +3,7 @@ var aws = require('aws-sdk');
 module.exports = {
   uploadPhoto: function(req, res){
     console.log('uploadPhoto is being called');
-    aws.config.update({accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY});
+    aws.config.update({accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY, region: 'us-west-2'});
     var s3 = new aws.S3();
     var s3_params = {
         Bucket: process.env.S3_BUCKET,
@@ -18,6 +18,7 @@ module.exports = {
         }
         else{
             console.log('success');
+            console.log('s3params ContentType: '+ s3_params.ContentType);
             var return_data = {
                 signed_request: data,
                 url: 'https://'+process.env.S3_BUCKET+'.s3.amazonaws.com/'+req.query.file_name

@@ -9,6 +9,7 @@ angular.module('watchly.imageUpload', ['ngFileUpload'])
     return $http.get("/api/photos/sign_s3?file_name=" + file.name + "&file_type=" + file.type)
       .then(function (res) {
         if (res.status === 200) {
+          console.log("response: " + res);
           console.log("res.signed: " + res.data.signed_request);
           imageUpload.upload(file, res.data.signed_request);
         } else {
@@ -18,6 +19,7 @@ angular.module('watchly.imageUpload', ['ngFileUpload'])
   };
 
   imageUpload.upload = function (file, signed_request) {
+    console.log('filetype: '+ file.type);
     Upload.upload({
       url: signed_request,
       file: file,
