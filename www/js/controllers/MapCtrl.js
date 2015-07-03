@@ -185,7 +185,24 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.infoWindows = [];
   $scope.cache = {};
 
+  // extend the object within renderIncident with 
+  $scope.extend = function (obj) {
+    obj.shortAddress = obj.fuzzyAddress.split(",")[0];
+    if (obj.votes === 0) {
+      obj.percentageOfUpvotes = 0;
+    } else {
+      obj.percentageOfUpvotes = $scope.calculateUpvotePercentage(obj.votes, obj.popularity);
+    }
+    return obj;
+  };
+
+  $scope.calculateUpvotePercentage = function (votes, popularity) {
+    return parseInt(((votes + popularity) / (2 * votes)) * 100);
+  };
+
   $scope.renderIncident = function (incidentObj) {
+    var hasVoted = false;
+    var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
     var incident = new google.maps.Marker({
@@ -193,17 +210,14 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       map: $scope.map,
       icon: incidentIcon
     });
-    incidentObj.shortAddress = incidentObj.fuzzyAddress.split(",")[0];
-    incidentObj.percentageOfUpvotes = parseInt(((incidentObj.votes + incidentObj.popularity) / (2 * incidentObj.votes)) * 100);
-    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' +
-    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] +
-    // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
-    var incidentInfoWindow;
+
+    // extend object to include properties that the template needs
+    incidentObj = $scope.extend(incidentObj);
+    // create html for info window by passing in incident obj
     var incidentInfoWindowContent = $scope.template(incidentObj);
-    var hasVoted = false;
-
-    google.maps.event.addListener(incident, 'click', function () {
+    
+    google.maps.event.addListener(incident, 'mousedown', function () {
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
@@ -211,68 +225,79 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         content: incidentInfoWindowContent
       });
       google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
-        var pop = document.getElementById('popularity');
-        var numVotes = document.getElementById('votes');
-        // if there's something in the cache, a vote has already happened
-        // TODO: set proper % from cache
-        if ($scope.cache[incidentObj.id]) {
-          hasVoted = true;
-          cachedPop = $scope.cache[incidentObj.id].popularity;
-          cachedVotes = $scope.cache[incidentObj.id].votes;
-          cachedArrow = $scope.cache[incidentObj.id].hiddenArrow;
+        var cachedObj = $scope.cache[incidentObj.id];
 
-          document.getElementById(cachedArrow).style.visibility = 'hidden';
-          pop.innerHTML = cachedPop;
-          document.getElementById('percentage').innerHTML = parseInt(((cachedVotes + cachedPop) / (2 * cachedVotes)) * 100);
+        if (cachedObj) {
+          // if there's something in the cache, a vote has already happened
+          hasVoted = true;
+          $scope.manipulateHtml(cachedObj);
         }
 
         if (!hasVoted) {
-          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
-            $scope.upvote(incidentObj, pop, numVotes);
+          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'mousedown', function () {
+            $scope.upvote(incidentObj);
           });
-          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'click', function () {
-            $scope.downvote(incidentObj, pop, numVotes);
+          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'mousedown', function () {
+            $scope.downvote(incidentObj);
           });
         }
+        // add event listener for submit click that grabs the message out of the text box and passes it to:
+          // $scope.submitMessage(incidentObj, message)
+          // also clear the current value in the input box
       });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
     });
   };
 
-  $scope.upvote = function (petObj, pop, numVotes) {
+  $scope.submitMessage = function (petObj, message) {
+    // update petObj with new message and send new message to Messages factory to update db
+
+    // render new message immediately on screen
+    // cache the updated message
+  };
+
+  $scope.manipulateHtml = function (cachedObj) {
+    // update messages in template with cached messages
+    document.getElementById(cachedObj.hiddenArrow).style.visibility = 'hidden';
+    document.getElementById('popularity').innerHTML = cachedObj.popularity;
+    document.getElementById('percentage').innerHTML = $scope.calculateUpvotePercentage(cachedObj.votes, cachedObj.popularity);
+  };
+
+  $scope.upvote = function (petObj) {
     // update petObj and pass new values to DB through incidents factory
     petObj.popularity++;
     petObj.votes++;
     Incidents.updatePopularity(petObj);
-    // render new pop immediately on the screen
-    pop.innerHTML++;
-    // hide downvote arrow
+
+    // render new pop immediately on the screen and hide downvote arrow
+    document.getElementById('popularity').innerHTML++;
     document.getElementById('down-arrow').style.visibility = 'hidden';
     // cache the updated values
     $scope.cache[petObj.id] = {
       popularity: petObj.popularity,
       votes: petObj.votes,
       hiddenArrow: 'down-arrow'
-    }
+    };
+  };
 
-  }
-  $scope.downvote = function (petObj, pop, numVotes) {
+  $scope.downvote = function (petObj) {
     // update petObj and pass new values to DB through incidents factory
     petObj.popularity--;
     petObj.votes++;
     Incidents.updatePopularity(petObj);
-    // render new pop immediately on the screen
-    pop.innerHTML--;
-    // hide upvote arrow
+
+    // render new pop immediately on the screen and hide upvote arrow
+    document.getElementById('popularity').innerHTML--;
     document.getElementById('up-arrow').style.visibility = 'hidden';
+
     // cache the updated values
     $scope.cache[petObj.id] = {
       popularity: petObj.popularity,
       votes: petObj.votes,
       hiddenArrow: 'up-arrow'
-    }
-  }
+    };
+  };
 
 
 

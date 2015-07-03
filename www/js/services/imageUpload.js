@@ -10,7 +10,7 @@ angular.module('watchly.imageUpload', [])
       .then(function (res) {
         if (res.status === 200) {
           console.log("res: ", res)
-          imageUpload.upload(file, res.return_data.signed_request);
+          imageUpload.upload(file, res.data.signed_request);
         } else {
           console.error(res.data.error);
         }
