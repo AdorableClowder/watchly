@@ -8,7 +8,7 @@ module.exports = {
     var s3_params = {
         Bucket: process.env.S3_BUCKET,
         Key: req.query.file_name,
-        Expires: 60,
+        Expires: 360000,
         ContentType: req.query.file_type,
         ACL: 'public-read'
     };
