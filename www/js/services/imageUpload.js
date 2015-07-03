@@ -21,7 +21,7 @@ angular.module('watchly.imageUpload', ['ngFileUpload'])
     Upload.upload({
       url: signed_request,
       file: file,
-      headers: {'x-amz-acl': 'public-read'}
+      headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type}
     }).progress(function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
       console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
