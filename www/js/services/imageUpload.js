@@ -1,6 +1,6 @@
-angular.module('watchly.imageUpload', [])
+angular.module('watchly.imageUpload', ['ngFileUpload'])
 
-.factory('imageUpload', function ($http) {
+.factory('imageUpload', function ($http, Upload) {
 
   var imageUpload = {};
 
