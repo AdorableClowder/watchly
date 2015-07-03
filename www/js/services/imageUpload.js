@@ -20,17 +20,28 @@ angular.module('watchly.imageUpload', ['ngFileUpload'])
 
   imageUpload.upload = function (file, signed_request) {
     console.log('filetype: '+ file.type);
-    Upload.upload({
-      url: signed_request,
-      file: file,
-      method: 'PUT',
-      headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type}
-    }).progress(function (evt) {
-      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-    }).success(function (data, status, headers, config) {
-      console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-    });
+    return $http({
+        method: 'PUT',
+        url: signed_request,
+        data: file,
+        headers: {
+                    'x-amz-acl': 'public-read'
+                  }
+      })
+      .then(function (resp) {
+        console.log(resp);
+      });
+    // Upload.upload({
+    //   url: signed_request,
+    //   file: file,
+    //   method: 'PUT',
+    //   headers: {'x-amz-acl': 'public-read', 'Content-Type': file.type}
+    // }).progress(function (evt) {
+    //   var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+    //   console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+    // }).success(function (data, status, headers, config) {
+    //   console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+    // });
   };
 
   return imageUpload;
