@@ -9,15 +9,15 @@ module.exports = {
 
     new User({username: username}).fetch().then(function(user){
       if( !user ){  
-        res.status(401).send({error: "Unknown user"});
+        res.status(401).send("User not found");
       }
       else {
         user.comparePassword(password, function(match){
-          if( match) {
+          if( match ) {
             utils.createSession(req, res, user);
             res.status(200).send(user);
           } else {
-            res.status(401).send({error: "Incorrect username or password"});
+            res.status(401).send("Incorrect password");
           }
         });
       }

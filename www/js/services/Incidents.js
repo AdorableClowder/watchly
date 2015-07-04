@@ -75,12 +75,15 @@ angular.module('watchly.Incidents', [])
         url: '/api/incidents',
         data: incident
       })
-      .then(function (res) {
+      .success(function (res) {
         if (res.status === 200) {} else {
-          console.log(res.data.error);
+          // console.log(res.data.error);
         }
         return res.data;
-      });
+      })
+      .error(function (err) {
+        throw new Error(err.data);
+      })
   };
 
   return {

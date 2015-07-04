@@ -8,13 +8,18 @@ angular.module('watchly.Auth', [])
         url: '/api/users/signin',
         data: user
       })
-      .then(function (res) {
-        if (res.status === 200) {
-          authenticatedUser = res.data;
-        } else {
-          console.log(res.data.error);
-        }
+      .success(function (res) {
+        // if (res.status === 200) {
+        authenticatedUser = res;
+        // } else {
+        //   console.log(res.data.error);
+        //   console.log(authenticatedUser);
+        // }
+        // return authenticatedUser;
         return authenticatedUser;
+      })
+      .error(function (err) {
+        throw new Error(err);
       });
   };
 

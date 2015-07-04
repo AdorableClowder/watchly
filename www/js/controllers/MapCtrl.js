@@ -202,22 +202,34 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.getRandomIncidentIndex = function () {
-    var keys = Object.keys($scope.incidents);
-    var result = Math.floor(Math.random() * keys.length) + 1;
-    console.log(result);
-    console.log($scope.incidents[result].hasVoted);
-    if ($scope.incidents[result].hasVoted === true) {
-      return $scope.getRandomIncidentIndex;
-    } else {
-      return result;
+    var i = 0;
+    var recurse = function () {
+      var keys = Object.keys($scope.incidents);
+      var result = Math.ceil(Math.random() * keys.length);
+      console.log(result)
+      if ($scope.incidents[result] && !$scope.incidents[result].hasVoted) {
+        return result;
+      } else {
+        if (i < Object.keys($scope.incidents).length) {
+          i++;
+          return recurse();
+        }
+      }
     }
+    return recurse();
   }
 
   $scope.renderRandomIncident = function () {
-    $scope.renderIncident($scope.incidents[$scope.getRandomIncidentIndex()], true);
+    var idx = $scope.getRandomIncidentIndex();
+    if ($scope.incidents[idx]) {
+      $scope.renderIncident($scope.incidents[idx], true);
+    }
   }
 
   $scope.renderIncident = function (incidentObj, callImmediately) {
+    if (!incidentObj) {
+      return;
+    }
     var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -356,7 +368,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.newIncident.curDate = "";
   $scope.newIncident.curTime = "";
   $scope.newIncidentType;
-
   $scope.incidentReportForm = {
     hidden: true
   };
@@ -409,6 +420,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
   };
 
+  // checks to see if the user is signed in the either opens the 
+  // incident report form or the signIn modal
   $scope.confirmIncidentCreate = function () {
     if (Auth.isAuthenticated()) {
       $scope.incidentReportForm.hidden = false;
@@ -478,6 +491,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         $scope.getIncidents();
         $scope.renderAllIncidents();
         $scope.loading.hide();
+      })
+      .catch(function (err) {
+        $scope.err = err;
       });
     });
     console.log($rootScope);
@@ -549,6 +565,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   });
 
   $scope.profileActivate = function () {
+    // debugger;
     if (Auth.isAuthenticated()) {
       $scope.user = Auth.getUser();
       $scope.profileModal.show();
@@ -591,10 +608,16 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     });
   };
 
+  // signin function called by the template
   $scope.signIn = function (user) {
-    Auth.signin(user).then(function (res) {
+    Auth.signin(user)
+    .then(function (res) {
       $scope.closeSignInModal();
-    });
+      $scope.incidentReportForm.hidden = false;
+    })
+    .catch(function (err) {
+      $scope.err = err.data;
+    })
   };
 
   $scope.signOut = function () {
@@ -604,7 +627,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.forgotPassword = function (email) {
-    Auth.forgotpassword(email).then(function (res) {
+    Auth.forgotpassword(email)
+    .then(function (res) {
       $scope.closeForgotPasswordModal();
     });
   };
