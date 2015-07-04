@@ -220,10 +220,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   }
 
   $scope.renderRandomIncident = function () {
-    var idx = $scope.getRandomIncidentIndex();
-    if ($scope.incidents[idx]) {
-      $scope.renderIncident($scope.incidents[idx], true);
-    }
+    $scope.renderIncident($scope.incidents[$scope.getRandomIncidentIndex()], true);
   }
 
   $scope.renderIncident = function (incidentObj, callImmediately) {
@@ -420,7 +417,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
   };
 
-  // checks to see if the user is signed in the either opens the 
+  // checks to see if the user is signed in the either opens the
   // incident report form or the signIn modal
   $scope.confirmIncidentCreate = function () {
     if (Auth.isAuthenticated()) {
@@ -492,9 +489,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         $scope.renderAllIncidents();
         $scope.loading.hide();
       })
-      .catch(function (err) {
-        $scope.err = err;
-      });
+        .catch(function (err) {
+          $scope.err = err;
+        });
     });
     console.log($rootScope);
   };
@@ -611,13 +608,13 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   // signin function called by the template
   $scope.signIn = function (user) {
     Auth.signin(user)
-    .then(function (res) {
-      $scope.closeSignInModal();
-      $scope.incidentReportForm.hidden = false;
-    })
-    .catch(function (err) {
-      $scope.err = err.data;
-    })
+      .then(function (res) {
+        $scope.closeSignInModal();
+        $scope.incidentReportForm.hidden = false;
+      })
+      .catch(function (err) {
+        $scope.err = err.data;
+      })
   };
 
   $scope.signOut = function () {
@@ -628,9 +625,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
   $scope.forgotPassword = function (email) {
     Auth.forgotpassword(email)
-    .then(function (res) {
-      $scope.closeForgotPasswordModal();
-    });
+      .then(function (res) {
+        $scope.closeForgotPasswordModal();
+      });
   };
 
   $scope.isValidPhoneNumber = function (number) {
