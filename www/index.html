@@ -59,7 +59,7 @@
         <label class="incidentReportFormLabel item item-input item-select">
             <div class="input-label">Pet Types: </div>
             <select ng-model="newIncident.type" ng-init="newIncident.type = 'Dog'" ng-change="newIncidentType = newIncident.type">
-                <option ng-repeat="incidentType in incidentTypes" ng-if="['Dog', 'Cat', 'Fish', 'Lizard', 'Rat', 'Unicorn'].indexOf(incidentType.type) !== -1">{{incidentType.type}}</option>
+                <option ng-repeat="incidentType in incidentTypes" ng-if="['dog', 'cat', 'fish', 'lizard', 'rat', 'unicorn'].indexOf(incidentType.type) !== -1">{{incidentType.type}}</option>
             </select>
         </label>
         <label class="item item-input">

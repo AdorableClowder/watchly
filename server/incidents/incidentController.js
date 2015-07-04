@@ -19,12 +19,9 @@ module.exports = {
       });
   },
 
-  // TODO: upPopularity and downPopularity knex db query functions to
   updatePopularity: function (req, res, next) {
     // change incidentTypeId based on the popularity
-    // refresh page/ re-render view to reflect change
     // console.log('req.body :', req.body);
-    // console.log('=========');
     // console.log('req.body.pet :', req.body.pet);
     // console.log('req.body.popularity :', req.body.popularity);
     var queryValue;
@@ -42,7 +39,6 @@ module.exports = {
       // getting the incidentTypeId from pet and popularity
       var myId = rows[0][0]['id'];
       console.log('myId :', myId);
-      // use that
       var changeQuery = 'update incidents set popularity = ' + req.body.popularity + ', votes = ' + req.body.votes + ', incidentTypeId = '+ myId + ' where id = ' + req.body.id;
       console.log(changeQuery);
       knex.raw(changeQuery)
@@ -56,7 +52,6 @@ module.exports = {
     console.log('all incidents controller helper fired');
     var query = 'select users.username, incidents.*, incidentTypes.type, incidentTypes.pet, incidentTypes.iconFilename from incidents, users,incidentTypes where incidents.userid = users.id and incidents.incidentTypeId = incidentTypes.id';
     knex.raw(query)
-    // knex.select('*').from('incidents')
       .then(function (rows) {
         res.send(rows);
       });
