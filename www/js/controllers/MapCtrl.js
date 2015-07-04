@@ -136,6 +136,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
     Incidents.getAllIncidents().then(function (result) {
       result[0].forEach(function (incident) {
+        incident.hasVoted = false;
         $scope.incidents[incident.id] = incident;
       })
       $scope.renderAllIncidents();
@@ -200,8 +201,23 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     return parseInt(((votes + popularity) / (2 * votes)) * 100);
   };
 
-  $scope.renderIncident = function (incidentObj) {
-    var hasVoted = false;
+  $scope.getRandomIncidentIndex = function () {
+    var keys = Object.keys($scope.incidents);
+    var result = Math.floor(Math.random() * keys.length) + 1;
+    console.log(result);
+    console.log($scope.incidents[result].hasVoted);
+    if ($scope.incidents[result].hasVoted === true) {
+      return $scope.getRandomIncidentIndex;
+    } else {
+      return result;
+    }
+  }
+
+  $scope.renderRandomIncident = function () {
+    $scope.renderIncident($scope.incidents[$scope.getRandomIncidentIndex()], true);
+  }
+
+  $scope.renderIncident = function (incidentObj, callImmediately) {
     var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -217,7 +233,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // create html for info window by passing in incident obj
     var incidentInfoWindowContent = $scope.template(incidentObj);
 
-    google.maps.event.addListener(incident, 'mousedown', function () {
+    var openIncidentWindow = function () {
+
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
@@ -229,25 +246,39 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
         if (cachedObj) {
           // if there's something in the cache, a vote has already happened
-          hasVoted = true;
+          incidentObj.hasVoted = true;
           $scope.manipulateHtml(cachedObj);
         }
 
-        if (!hasVoted) {
+        if (!incidentObj.hasVoted) {
           google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'mousedown', function () {
             $scope.upvote(incidentObj);
+            incidentObj.hasVoted = true;
+            if (callImmediately) {
+              $scope.renderRandomIncident();
+            }
           });
           google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'mousedown', function () {
             $scope.downvote(incidentObj);
+            incidentObj.hasVoted = true;
+            if (callImmediately) {
+              $scope.renderRandomIncident();
+            }
           });
         }
         // add event listener for submit click that grabs the message out of the text box and passes it to:
-          // $scope.submitMessage(incidentObj, message)
-          // also clear the current value in the input box
+        // $scope.submitMessage(incidentObj, message)
+        // also clear the current value in the input box
       });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
-    });
+    };
+
+    if (callImmediately) {
+      openIncidentWindow()
+    }
+    google.maps.event.addListener(incident, 'mousedown', openIncidentWindow)
+
   };
 
   $scope.submitMessage = function (petObj, message) {

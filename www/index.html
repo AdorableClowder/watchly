@@ -49,7 +49,7 @@
     <ion-header-bar class="bar-calm">
         <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
         <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>
-        <!-- <a ng-click="testAlertForum()" class="button button-icon icon ion-navicon-round"></a> -->
+        <a ng-click="renderRandomIncident()" class="button button-icon icon ion-navicon-round"></a>
         <a ng-click="profileActivate()" class="button button-icon icon ion-ios-contact-outline"></a>
     </ion-header-bar>
     <ion-content scroll="false">
@@ -60,7 +60,7 @@
         <label class="incidentReportFormLabel item item-input item-select">
             <div class="input-label">Pet type: </div>
             <select ng-model="newIncident.type" ng-change="newIncidentType = newIncident.type">
-                <option ng-repeat="incidentType in incidentTypes" ng-if="['Dog', 'Cat', 'Fish', 'Lizard', 'Rat', 'Unicorn'].indexOf(incidentType.type) !== -1">{{incidentType.type}}</option>
+                <option ng-repeat="incidentType in incidentTypes" ng-if="['dog', 'cat', 'fish', 'lizard', 'rat', 'unicorn'].indexOf(incidentType.type) !== -1">{{incidentType.type}}</option>
             </select>
         </label>
         <label class="item item-input">
@@ -86,7 +86,7 @@
         <button ng-click="submitIncident(newIncident);" class="button button-block button-calm">Submit!</button>
     </div>
     <ion-footer-bar class="bar-stable">
-        <h4 class="title">Petly: Where the Cute Pets At?</h4>
+        <h4 class="title">Petly: Where the Cute At?</h4>
         <button ng-click="confirmIncidentCreate()" class="createIncident button button-calm" ng-hide="createIncidentButton.hidden">
             <a class="icon ion-edit"></a>
         </button>

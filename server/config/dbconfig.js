@@ -38,6 +38,7 @@ async.parallel([
           incidentType.string('type', 20);
           incidentType.string('pet', 20);
           incidentType.string('iconFilename', 50);
+          incidentType.integer('value');
         }).then(function (table) {
           callback();
         });

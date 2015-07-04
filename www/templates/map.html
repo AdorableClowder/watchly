@@ -1,0 +1,49 @@
+<ion-modal-view id="map" ng-controller="MapCtrl">
+    <ion-header-bar class="bar-calm">
+        <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
+        <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>
+        <!-- <a ng-click="toggleLeftSideMenu()" class="button button-icon icon ion-navicon-round"></a> -->
+        <a ng-click="profileActivate()" class="button button-icon icon ion-ios-contact-outline"></a>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <div id="map"></div>
+    </ion-content>
+    <div class="incidentReportForm" ng-hide="incidentReportForm.hidden" ng-controller="MyCtrl">
+        <label class="incidentReportTitle">Report New Incident</label>
+        <label class="incidentReportFormLabel item item-input item-select">
+            <div class="input-label">Incident Typez: </div>
+            <select ng-model="newIncident.type" ng-change="newIncidentType = newIncident.type">
+                <option ng-repeat="incidentType in incidentTypes" ng-if="['Dog', 'Cat', 'Fish', 'Lizard', 'Rat', 'Unicorn'].indexOf(incidentType.type) !== -1">{{incidentType.type}}</option>
+            </select>
+        </label>
+        <label class="item item-input">
+            <span class="input-label">Incident Date: </span>
+            <input class="incidentDate" type="date" ng-model="newIncident.curDate">
+        </label>
+        <label class="item item-input">
+            <span class="input-label">Incident Time: </span>
+            <input class="incidentTime" type="time" ng-model="newIncident.curTime">
+        </label>
+        <label class="item item-input">
+            <input class="incidentDescription" type="text" ng-model="newIncident.description" placeholder="Incident Description" required>
+        </label>
+        <label class="item item-input">
+            <div>
+                <button class="button button-block button-calm" ngf-select ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
+                    Upload an Image
+                </button>
+                <img class="upload-preview" ngf-src="files[0]" ngf-accept="'image/*'">
+            </div>
+        </label>
+        <button ng-click="submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
+    </div>
+    <ion-footer-bar class="bar-stable">
+        <h4 class="title">Petly: Where the Cute At?</h4>
+        <button ng-click="confirmIncidentCreate()" class="createIncident button button-calm" ng-hide="createIncidentButton.hidden">
+            <a class="icon ion-edit"></a>
+        </button>
+        <button ng-click="removeIncident()" class="cancelIncident button button-assertive" ng-hide="cancelIncidentButton.hidden">
+            <a class="icon ion-close"></a>
+        </button>
+    </ion-footer-bar>
+</ion-modal-view>
